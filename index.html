@@ -2,21 +2,25 @@
 <head>
 <style>
 
+.page-container {
+  max-width: 1200px; /* Adjust this value as needed */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
 .header {
   padding: 5px;
-  text-align: left;
+  text-align: center;
   background: #1abc9c;
   color: white;
   font-size: 15px;
-  text-indent: 95px;
 }
 
 body {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+  display: block;
   background: linear-gradient(45deg, #fffff086 0%, #ffffff 100%);/* Light pale mint */
 }
+
 .headline{
   position: relative;
   top: 20px;
@@ -25,12 +29,11 @@ body {
 }
 
 .profilepic{
-  position:absolute;
-  width:50%;
-  top:20px;
-  left:590px;
+  position:relative;
+  width:22%;
+  margin:20px auto;
+  display:block;
   border-radius: 50%;
-  
 }
 
 .polygon {
@@ -47,28 +50,48 @@ div.title{
 
 div.intro{
   position:relative;
-  top:20px;
-  width:550px;
-  left:100px;
+  width:100%;
+  max-width:850px;
+  margin:20px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
-div.introwords{
-  font-size: 16px;
-  font-family: "Times New Roman", Times, serif;
+div.intro-content {
+  flex: 1;
+  text-align: left;
+  padding-right: 20px;
 }
 
-.label{
-  position:relative;
-  top:400px;
-  left:605px;
-  width:250px;
+div.intro-profile {
+  width: 30%;
+  text-align: center;
+}
+
+.profilepic {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto 10px;
+  display: block;
+  border-radius: 50%;
+}
+
+.label {
+  width: 100%;
   text-align: center; 
   font-size: 12px;
   font-style: oblique;
   font-family: "Times New Roman", Times, serif;
-  color:rgb(0, 0, 0);
+  color: rgb(0, 0, 0);
+  margin: 10px 0;
 }
 
+div.introwords {
+  font-size: 16px;
+  font-family: "Times New Roman", Times, serif;
+  text-align: left;
+}
 
 .university{
   text-indent: 26px;
@@ -95,7 +118,8 @@ hr.solid {
 .box {
   position: relative;
   top:70px;
-  left:100px;
+  left: 0;
+  margin: 70px auto 0;
   width:875px;
   transform-style: preserve-3d;
   border-radius: 2px;
@@ -114,6 +138,7 @@ hr.solid {
 .grid-container {
   position:relative;
   width:850px;
+  top:-10px;
   height: 350px;
   display: grid;
   grid-template-columns: 300px 300px 300px;
@@ -123,6 +148,8 @@ hr.solid {
   border-radius: 10px;
   border-style: solid;
   border-color: black;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .grid-item {
@@ -147,11 +174,13 @@ hr.solid {
   grid-template-columns: 310px 310px 300px;
   justify-content: left;
   padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .grid-item-skill {
   position:relative;
   top:0px;
-  left: 10px;
+  left: -70px;
   text-align: left;
   font-family: Futura,Trebuchet MS,Arial,sans-serif; 
 }
@@ -195,7 +224,6 @@ hr.solid {
 ul.list {
   position:relative;
   top: -10px;
-  left: -23px;
   list-style-type: square;
 }
 
@@ -204,41 +232,42 @@ ul.list {
 </head>
 
 <body id="center">
-
-
-
+<div class="page-container">
 <div class="header">
     <h1>David Chen</h1>
 </div>
 
 
-<div class = "intro">
-<img class = "profilepic" src = "diesel & me 1.png" width= "22%">
-<div class = "label"> 
-  Cycling | Cooking | Gaming | Analyzing<br> 
-  <s>Professional Dogwalker</s>
+<div class="intro">
+  <div class="intro-content">
+    <h2 class="title">	
+      Growth & Data Analyst
+    </h2>
+    <div class="introwords">
+      <p>
+        As a seasoned Data Analyst with over three years of experience, I specialize in data visualization, statistical analysis, and database management utilizing SQL, Python, and Tableau. I excel at transforming complex datasets into actionable insights that drive strategic decision-making. My strong analytical skills and proactive approach empower me to tackle challenging projects effectively, particularly in dynamic environments. I am passionate about leveraging data to fuel research and foster business growth.
+      </p>
+    </div>
+    <h2 class="headline">
+      EDUCATION
+    </h2>
+    
+    &#127979; MSc in Neuroscience - 2024<br>
+    <p class="university">University of Glasgow</p>
+    &#127979; BSc, Major in Psychology & Minor in Computer Science - 2021<br>
+    <p class="university">Denison University</p>
   </div>
-<div class = "profilepic">
+  
+  <div class="intro-profile">
+    <img class="profilepic" src="diesel & me 1.png" alt="Profile Picture">
+    <div class="label">
+      Cycling | Cooking | Gaming | Analyzing<br> 
+      <s>Professional Dogwalker</s>
+    </div>
+  </div>
 </div>
-<h2 class = "title">	
-Growth & Data Analyst
-</h2>
-<div class="introwords">
-<p>
-As a seasoned Data Analyst with over two years of experience, I specialize in data visualization, statistical analysis, and database management utilizing SQL, Python, and Tableau. I excel at transforming complex datasets into actionable insights that drive strategic decision-making. My strong analytical skills and proactive approach empower me to tackle challenging projects effectively, particularly in dynamic environments. I am passionate about leveraging data to fuel research and foster business growth.
-</p>
-</div>
-<h2 class = "headline">
-EDUCATION
-</h2>
-
-&#127979; MSc in Neuroscience - 2024<br>
-<p class = "university">Universtiy of Glasgow</p>
-&#127979; BSc, Major in Psychology & Minor in Computer Science - 2021<br>
-<p class = "university">Denison Universtiy</p>
 
 <hr class="solid">
-</div>
 
 <div class = "portfolio">
 <h2 class = "headline">
@@ -377,7 +406,7 @@ Programming Languages:
     </div>
 </div>
 
+</div>
+</div>
 </body>
 </html>
-
-
