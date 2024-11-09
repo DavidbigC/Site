@@ -227,6 +227,52 @@ ul.list {
   list-style-type: square;
 }
 
+.section {
+  padding: 40px 0;
+}
+
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card h3 {
+  padding: 15px;
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.card p {
+  padding: 0 15px 15px;
+  margin: 0;
+  color: #666;
+}
 
 </style>
 </head>
@@ -269,97 +315,76 @@ ul.list {
 
 <hr class="solid">
 
-<div class = "portfolio">
-<h2 class = "headline">
-PORTFOLIO
-</h2>
-</div>
-
-<div class="box::before">
-<div class="box">
-<div class="grid-container">
-  <div class="grid-item">
-    <div class="grid-words">
-    Dolomite Minerals Farm Calculation
+<section id="analysis" class="section">
+  <div class="container">
+    <h2 class="headline">PORTFOLIO</h2>
+    <div class="analysis-grid">
+      <div class="card">
+        <a href="https://substack.com/home/post/p-151048010">
+          <img src="contango writeup.PNG" alt="Contango" class="card-image">
+          <h3>Contango $TANGO Analysis</h3>
+        </a>
+      </div>
+      <div class="card">
+        <a href="https://dune.com/dragonborn/contango">
+          <img src="contango dune.png" alt="Contango Dashboard" class="card-image">
+          <h3>Contango Trading Dashboard</h3>
+        </a>
+      </div>
+      <div class="card">
+        <a href="Dolomite-Farming.html">
+          <img src="prediction.png" alt="Dolomite Mineral Analysis" class="card-image">
+          <h3>Dolomite Mineral Calculation</h3>
+        </a>
+      </div>
+      <div class="card">
+        <a href="https://github.com/DavidbigC/Pendle-PT-Trading-Tool">
+          <img src="Pendle-PT-Trading-Tool.png" alt="Pendle PT Trading" class="card-image">
+          <h3>Pendle PT Trading Tool</h3>
+        </a>
+      </div>
+      <div class="card">
+        <a href="https://dune.com/davidbigc/sofa-info">
+          <img src="SOFAdashboard.png" alt="SOFA Dashboard" class="card-image">
+          <h3>Dashboard for Sofa Protocol</h3>
+        </a>
+      </div>
+      <div class="card">
+        <a href="https://dune.com/davidbigc/carv-node-sale">
+          <img src="Carv_Node_sale.png" alt="CARV Node Sale" class="card-image">
+          <h3>CARV Node Sale Dashboard</h3>
+        </a>
+      </div>
+      <div class="card">
+        <a href="https://davidbigc.github.io/BAYC-trading-analysis/">
+          <img src="BAYC analysis.png" alt="BAYC Analysis" class="card-image">
+          <h3>BAYC Trading Data Analysis</h3>
+        </a>
+      </div>
+      <div class="card">
+        <a href="Best_EVM.html">
+          <img src="BestEVM.png" alt="Best EVM" class="card-image">
+          <h3>Prominent EVM for new Gamefi Projects</h3>
+        </a>
+      </div>
     </div>
-    <a href="Dolomite-Farming.html">
-    <div class="tooltip">
-    <img class="grid-pic" src = "prediction.png">
+  </div>
+</section>
+
+<section id="academic" class="section">
+  <div class="container">
+    <h2 class="headline">Academic Projects</h2>
+    <div class="analysis-grid">
+      <div class="card">
+        <a href="Cybersickness.pdf">
+          <img src="skipratepredict.png" alt="Cybersickness Research" class="card-image">
+          <h3>Cybersickness & Cognitive Load</h3>
+        </a>
+      </div>
+      <!-- Add more academic project cards here as needed -->
     </div>
-    </a>
-    </div>
-  <div class="grid-item">
-  <div class="grid-words">
-
-    Pendle PT Trading Tool
-    </div>
-    <a href= "https://github.com/DavidbigC/Pendle-PT-Trading-Tool">
-    <div class="tooltip">
-    <img class="grid-pic" src = "Pendle-PT-Trading-Tool.png">
   </div>
-  </a>
-  </div>
-
-  <div class="grid-item">
-  <div class="grid-words">
-  Dashboard for Sofa Protocol
-  </div>
-  <a href="https://dune.com/davidbigc/sofa-info">
-  <img class="grid-pic" src = "SOFAdashboard.png">
-  </a>
-  </div>
-  <div class="grid-item">
-  <div class="grid-words">
-  CARV node sale Dashboard (Community Only) 
-  </div>
-  <a href="https://dune.com/davidbigc/carv-node-sale">
-  <img class="grid-pic" src = "Carv_Node_sale.png" >
-  </a></div>
-  <div class="grid-item2">
-  <div class="grid-words">
-  BAYC Trading Data Analysis
-  </div>
-  <a href="https://davidbigc.github.io/BAYC-trading-analysis/">
-  <img class="grid-pic" src = "BAYC analysis.png">
-  </a></div>
-
-  <div class="grid-item2">
-    <div class="grid-words">
-    Prominent EVM for new Gamefi Projects
-    </div>
-    <a href="Best_EVM.html">
-    <img class="grid-pic" src = "BestEVM.png">
-    </a></div>
-
-
-</div>
-</div>
-</div>
-
-<div class = "portfolio">
-  <h2 class = "headline">
-  Academic Projects
-  </h2>
-  </div>
-  
-  <div class="box::before">
-  <div class="box">
-  <div class="grid-container">
-    <div class="grid-item">
-    <div class="grid-words">
-    Cybersickness & Cognitive Load
-    </div>
-    <a href="Cybersickness.pdf">
-    <div class="tooltip">
-    <img class="grid-pic" src = "skipratepredict.png">
-    </div>
-    </a>
-    </div>
-
-  </div>
-  </div>
-  </div>
-
+</section>
 
 <div class="skill">
 <h2 class="skillheader">
