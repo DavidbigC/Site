@@ -1,773 +1,402 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>David Chen — On-chain Researcher &amp; AI Engineer</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>David Chen — On-Chain Market Maker &amp; Exchange API Integrations</title>
+  <meta name="description" content="David Chen operates on-chain perpetuals systems on Lighter, Hyperliquid and Variational. Selected work in market making, exchange APIs, developer support and on-chain analytics.">
+  <link rel="canonical" href="https://davidbigc.github.io/Site/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Lora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    *, *::before, *::after { box-sizing: border-box; }
     :root {
-      --bg: #F9F5EE;
-      --surface: #FFFFFF;
-      --header-bg: #1E1E1E;
-      --accent: #5C7A5C;
-      --accent-light: #EEF3EE;
-      --text: #2C2C2C;
-      --text-sec: #666;
-      --border: #E5DDD0;
-      --tag-bg: #EEF3EE;
-      --tag-text: #3D5E3D;
-      --shadow: rgba(0,0,0,0.07);
+      --bg: #f9f5ee;
+      --surface: #fffdf8;
+      --header: #1e1e1e;
+      --text: #2c2c2c;
+      --muted: #565750;
+      --accent: #3d6245;
+      --light-accent: #b9d4b9;
+      --border: #ded6c9;
+      --display-font: Lora, Georgia, serif;
     }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
+    body { margin: 0; background: var(--bg); color: var(--text); font: 1rem/1.65 Inter, system-ui, sans-serif; }
+    h1, h2, h3, p, ul, dl, dd { margin: 0; }
+    a { color: var(--accent); text-underline-offset: 0.22em; }
+    a:hover { text-decoration-thickness: 2px; }
+    :focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+    code { font-size: 0.95em; }
+    .wrap { width: min(100% - 2.5rem, 920px); margin-inline: auto; }
+    .skip-link { position: absolute; left: 1rem; top: 0.5rem; transform: translateY(-250%); background: var(--surface); color: var(--accent); padding: 0.5rem 0.75rem; }
+    .skip-link:focus { transform: none; }
+    .hero, footer { background: var(--header); color: #eeeae1; }
+    .hero a, footer a { color: var(--light-accent); }
+    .hero { padding: clamp(3.25rem, 8vw, 5.25rem) 0 0; }
+    .hero-inner { display: flex; align-items: flex-start; gap: clamp(1.25rem, 4.5vw, 2.75rem); }
+    .hero-pic { width: 110px; height: 110px; flex: none; margin-top: 0.45rem; border: 3px solid #ffffff29; border-radius: 50%; object-fit: cover; }
+    .hero h1 { font: 700 clamp(2.85rem, 6vw, 4.25rem)/1.08 var(--display-font); letter-spacing: -0.045em; }
+    .tagline { margin-top: 0.55rem; color: var(--light-accent); font-size: clamp(1.03rem, 2.3vw, 1.25rem); font-weight: 600; }
+    .intro { max-width: 64ch; margin-top: 1rem; color: #dfdcd3; }
+    .links, .section-nav { display: flex; flex-wrap: wrap; gap: 0.45rem 1.25rem; align-items: center; }
+    .links { margin-top: 1rem; font-size: 0.92rem; }
+    .section-nav { margin-top: 2.25rem; padding: 0.95rem 0; border-top: 1px solid #ffffff26; font-size: 0.88rem; }
+    .section-nav a { text-decoration: none; }
+    .section-nav a:hover { text-decoration: underline; }
+    main section { padding: clamp(2.6rem, 6vw, 3.75rem) 0; }
+    main section + section { border-top: 1px solid var(--border); }
+    h2 { margin-bottom: 1.45rem; font: 600 clamp(1.85rem, 4vw, 2.45rem)/1.2 var(--display-font); letter-spacing: -0.03em; }
+    h3 { font: 600 1.18rem/1.4 var(--display-font); }
+    .work-list { border-top: 1px solid var(--border); }
+    .work { display: grid; grid-template-columns: minmax(10rem, 1fr) minmax(0, 2.25fr); gap: 0.5rem 2rem; padding: 1.3rem 0; border-bottom: 1px solid var(--border); }
+    .work:last-child { border-bottom: 0; padding-bottom: 0; }
+    .work p + p, .experience p + p { margin-top: 0.48rem; }
+    .work .links { margin-top: 0.55rem; }
+    .label { color: var(--accent); font-size: 0.85rem; font-weight: 600; }
+    .work h3 + .label { display: block; margin-top: 0.28rem; }
+    .projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; }
+    .project { display: flex; flex-direction: column; padding: 1.1rem 1.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+    .project p, .experience li, .archive p { font-size: 0.93rem; }
+    .project p { margin: 0.5rem 0 0.7rem; color: var(--muted); }
+    .project a { align-self: start; margin-top: auto; font-size: 0.88rem; }
+    .experience { display: grid; gap: 1.55rem; }
+    .experience-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.15rem 1.2rem; }
+    .dates { color: var(--muted); font-size: 0.89rem; }
+    .experience ul { margin-top: 0.45rem; padding-left: 1.15rem; }
+    .experience li + li { margin-top: 0.27rem; }
+    .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 2rem; }
+    .details-grid dt { margin-top: 0.65rem; font-weight: 600; }
+    .details-grid dd, .details-grid p { color: var(--muted); font-size: 0.93rem; }
+    .education { list-style: none; padding: 0; }
+    .education li { margin-top: 0.65rem; }
+    .education strong { display: block; }
+    .archive-group { border-top: 1px solid var(--border); }
+    .archive-group:last-child { border-bottom: 1px solid var(--border); }
+    summary { padding: 0.8rem 0; color: var(--accent); cursor: pointer; font-weight: 600; }
+    summary:hover { text-decoration: underline; text-underline-offset: 0.22em; }
+    .archive { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.1rem; padding: 0.2rem 0 1.25rem; }
+    .archive article { min-width: 0; }
+    .archive img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; object-position: top center; border: 1px solid var(--border); border-radius: 6px; margin: 0 0 0.5rem; }
+    .archive h3 { font-size: 1rem; }
+    .archive p { margin-top: 0.26rem; color: var(--muted); }
+    footer { padding: 1.5rem 0; }
+    .footer-inner { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.45rem 1.5rem; }
+    .footer-inner .links { margin: 0; }
+    @media (max-width: 650px) {
+      .hero-inner { gap: 1rem; }
+      .hero-pic { width: 70px; height: 70px; margin-top: 0.15rem; }
+      .work, .projects, .details-grid { grid-template-columns: minmax(0, 1fr); }
+      .archive { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    /* ─── HERO ─── */
-    .hero {
-      background: var(--header-bg);
-      padding: 56px 20px;
+    @media (max-width: 400px) {
+      .hero-inner { flex-direction: column; }
+      .archive { grid-template-columns: minmax(0, 1fr); }
     }
-
-    .hero-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 44px;
-    }
-
-    .hero-pic {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      object-fit: cover;
-      flex-shrink: 0;
-      border: 3px solid rgba(255,255,255,0.12);
-    }
-
-    .hero-text h1 {
-      font-family: 'Lora', serif;
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 5px;
-    }
-
-    .hero-tagline {
-      color: #A8C5A8;
-      font-size: 1rem;
-      font-weight: 400;
-      margin-bottom: 20px;
-      letter-spacing: 0.2px;
-    }
-
-    .hero-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px 14px;
-      align-items: center;
-    }
-
-    .hero-links a {
-      color: rgba(255,255,255,0.6);
-      font-size: 0.83rem;
-      transition: color 0.15s;
-    }
-
-    .hero-links a:hover { color: #fff; text-decoration: none; }
-    .hero-links .sep { color: rgba(255,255,255,0.2); }
-
-    /* ─── SECTION WRAPPER ─── */
-    .section {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 52px 20px;
-      border-top: 1px solid var(--border);
-    }
-
-    .section:first-of-type { border-top: none; }
-
-    .section-label {
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 22px;
-    }
-
-    /* ─── ABOUT ─── */
-    .about-text {
-      font-size: 0.97rem;
-      color: #444;
-      line-height: 1.8;
-      max-width: 700px;
-    }
-
-    /* ─── FEATURED PROJECTS ─── */
-    .featured-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-    }
-
-    .featured-card {
-      background: var(--surface);
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 12px var(--shadow);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .fcard-head {
-      padding: 22px 22px 18px;
-    }
-
-    .fcard-head.green { background: #1B2E1B; }
-    .fcard-head.navy  { background: #181C2E; }
-    .fcard-head.rust  { background: #2E1C18; }
-
-    .fcard-type {
-      font-size: 0.67rem;
-      font-weight: 600;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.38);
-      margin-bottom: 7px;
-    }
-
-    .fcard-name {
-      font-family: 'Lora', serif;
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 13px;
-    }
-
-    .fcard-badges { display: flex; gap: 8px; flex-wrap: wrap; }
-
-    .badge {
-      font-size: 0.7rem;
-      font-weight: 500;
-      padding: 3px 10px;
-      border-radius: 20px;
-      text-decoration: none;
-      transition: opacity 0.15s;
-    }
-
-    .badge:hover { opacity: 0.8; text-decoration: none; }
-    .badge-live   { background: var(--accent); color: #fff; }
-    .badge-github { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.15); }
-
-    .fcard-body {
-      padding: 18px 22px 22px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .fcard-desc {
-      font-size: 0.84rem;
-      color: var(--text-sec);
-      line-height: 1.65;
-      margin-bottom: 14px;
-    }
-
-    .fcard-bullets {
-      list-style: none;
-      flex: 1;
-      margin-bottom: 16px;
-    }
-
-    .fcard-bullets li {
-      font-size: 0.8rem;
-      color: #444;
-      padding: 3px 0 3px 14px;
-      position: relative;
-      line-height: 1.55;
-    }
-
-    .fcard-bullets li::before {
-      content: "→";
-      position: absolute;
-      left: 0;
-      color: var(--accent);
-      font-size: 0.68rem;
-      top: 5px;
-    }
-
-    .tech-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-
-    .tech-tag {
-      font-size: 0.68rem;
-      font-weight: 500;
-      padding: 2px 8px;
-      background: var(--tag-bg);
-      color: var(--tag-text);
-      border-radius: 4px;
-    }
-
-    /* ─── PROJECTS GRID ─── */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .project-card {
-      background: var(--surface);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px var(--shadow);
-      transition: transform 0.18s, box-shadow 0.18s;
-    }
-
-    .project-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-    }
-
-    .project-card a { display: block; color: inherit; text-decoration: none; }
-
-    .project-card img {
-      width: 100%;
-      height: 155px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .project-card-info { padding: 13px 15px 15px; }
-
-    .project-card-info h3 {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .project-card-info p {
-      font-size: 0.76rem;
-      color: var(--text-sec);
-      line-height: 1.5;
-    }
-
-    /* ─── EXPERIENCE ─── */
-    .exp-list { display: flex; flex-direction: column; gap: 26px; }
-
-    .exp-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 3px;
-    }
-
-    .exp-role { font-weight: 600; font-size: 0.93rem; }
-    .exp-dates { font-size: 0.76rem; color: var(--text-sec); }
-    .exp-org { font-size: 0.81rem; color: var(--accent); margin-bottom: 7px; }
-
-    .exp-bullets { list-style: none; }
-
-    .exp-bullets li {
-      font-size: 0.84rem;
-      color: #444;
-      padding: 3px 0 3px 14px;
-      position: relative;
-      line-height: 1.55;
-    }
-
-    .exp-bullets li::before {
-      content: "–";
-      position: absolute;
-      left: 0;
-      color: var(--accent);
-    }
-
-    /* ─── SKILLS ─── */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 28px;
-    }
-
-    .skill-group h4 {
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }
-
-    .skill-group ul { list-style: none; }
-
-    .skill-group ul li {
-      font-size: 0.82rem;
-      color: #444;
-      padding: 4px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .skill-group ul li:last-child { border-bottom: none; }
-
-    /* ─── EDUCATION ─── */
-    .edu-list { display: flex; flex-direction: column; gap: 14px; }
-
-    .edu-degree { font-weight: 600; font-size: 0.92rem; margin-bottom: 2px; }
-    .edu-school { font-size: 0.81rem; color: var(--text-sec); }
-
-    /* ─── FOOTER ─── */
-    footer {
-      background: var(--header-bg);
-      padding: 30px 20px;
-      text-align: center;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 8px 20px;
-      margin-bottom: 14px;
-    }
-
-    .footer-links a {
-      color: rgba(255,255,255,0.55);
-      font-size: 0.81rem;
-      transition: color 0.15s;
-    }
-
-    .footer-links a:hover { color: #fff; text-decoration: none; }
-
-    footer p { color: rgba(255,255,255,0.28); font-size: 0.74rem; }
   </style>
 </head>
 <body>
-
-<!-- ─── HERO ─── -->
-<header class="hero">
-  <div class="hero-inner">
-    <img src="PROFILE pic.jpg" alt="David Chen" class="hero-pic">
-    <div class="hero-text">
-      <h1>David Chen</h1>
-      <p class="hero-tagline">On-chain Researcher &amp; AI Engineer</p>
-      <div class="hero-links">
-        <a href="https://github.com/DavidbigC" target="_blank">GitHub</a>
-        <span class="sep">·</span>
-        <a href="https://x.com/davidbigcccc" target="_blank">X / Twitter</a>
-        <span class="sep">·</span>
-        <a href="https://dune.com/davidbigc" target="_blank">Dune</a>
-        <span class="sep">·</span>
-        <a href="https://flipsidecrypto.xyz/DavidC/dashboards" target="_blank">Flipside</a>
-        <span class="sep">·</span>
-        <a href="https://tradfiagentcn.xyz" target="_blank">Live Agent ↗</a>
-      </div>
-    </div>
-  </div>
-</header>
-
-<!-- ─── ABOUT ─── -->
-<section class="section">
-  <p class="section-label">About</p>
-  <p class="about-text">
-    On-chain researcher and DeFi practitioner with 5+ years tracking markets, protocols, and capital flows across multi-chain ecosystems. Deep hands-on experience monitoring whale wallet flows, liquidity movements, and protocol-level trends using Dune, Allium, and Flipside — combined with the engineering ability to build production AI agents, cross-exchange arbitrage systems, and data pipelines from scratch. Independently shipped multiple live trading tools and a full-stack LLM research agent.
-  </p>
-</section>
-
-<!-- ─── FEATURED PROJECTS ─── -->
-<section class="section">
-  <p class="section-label">Featured Projects</p>
-  <div class="featured-grid">
-
-    <div class="featured-card">
-      <div class="fcard-head green">
-        <p class="fcard-type">AI Research Agent</p>
-        <h3 class="fcard-name"><a href="https://github.com/DavidbigC/mytradfiagent" target="_blank" style="color:#fff;text-decoration:none;">AI Financial Research Agent</a></h3>
-        <div class="fcard-badges">
-          <a href="https://tradfiagentcn.xyz" class="badge badge-live" target="_blank">Live ↗</a>
-          <a href="https://github.com/DavidbigC/mytradfiagent" class="badge badge-github" target="_blank">GitHub</a>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-inner">
+        <img src="PROFILE%20pic.jpg" alt="" class="hero-pic" width="110" height="110">
+        <div>
+          <h1>David Chen</h1>
+          <p class="tagline">On-Chain Market Maker &amp; Arbitrageur</p>
+          <p class="intro">I operate live perpetuals systems on Lighter, Hyperliquid and Variational. I write exchange clients in Rust, own strategy and risk, and direct AI coding agents on larger builds. At CARV I helped external teams integrate APIs. At FLOKI I helped turn trading terminal feedback into requirements for engineering.</p>
+          <div class="links">
+            <a href="mailto:cgzdavid123@gmail.com">Email</a>
+            <a href="https://github.com/DavidbigC">GitHub</a>
+            <a href="https://x.com/davidbigcccc">X</a>
+          </div>
         </div>
       </div>
-      <div class="fcard-body">
-        <p class="fcard-desc">Production LLM agent conducting deep multi-turn financial research with adversarial bull/bear debate logic across global markets.</p>
-        <ul class="fcard-bullets">
-          <li>Up to 30 autonomous reasoning turns; OpenAI-compatible APIs with parallel tool execution</li>
-          <li>Live data from EastMoney, Shanghai Stock Exchange, and TradingView</li>
-          <li>User auth, per-user DB-backed conversation history, TypeScript/CSS chat frontend</li>
-        </ul>
-        <div class="tech-tags">
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">TypeScript</span>
-          <span class="tech-tag">OpenAI API</span>
-          <span class="tech-tag">async</span>
-          <span class="tech-tag">Flask</span>
+      <nav class="section-nav" aria-label="On this page">
+        <a href="#market-systems">Market systems</a>
+        <a href="#repositories">Repositories</a>
+        <a href="#experience">Experience</a>
+        <a href="#skills">Skills &amp; education</a>
+        <a href="#archive">Earlier work</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap" tabindex="-1">
+    <section id="market-systems" aria-labelledby="market-systems-heading">
+      <h2 id="market-systems-heading">Market systems</h2>
+      <div class="work-list">
+        <article class="work">
+          <div>
+            <h3>Funding &amp; spread arbitrage desk</h3>
+            <p class="label">Hyperliquid (trade.xyz HIP-3), Variational &amp; Lighter</p>
+          </div>
+          <div>
+            <p>I ran live funding and spread arbitrage between trade.xyz and Variational, including commodity perpetual trades around futures rollovers. I used index roll schedules, basis and funding to guide entries and exits. The three-venue desk logged <strong>13,114 trades in a 42-day attribution window</strong>.</p>
+            <p>I directed API session renewal and connection pooling for Variational, plus WebSocket fill confirmation and restart reconciliation for the Variational–Lighter executor.</p>
+            <div class="links"><a href="https://github.com/DavidbigC/DCmaster-cv/blob/main/projects/funding-desk.md">Read the arbitrage desk case study</a></div>
+          </div>
+        </article>
+        <article class="work">
+          <div>
+            <h3>RFQ execution</h3>
+            <p class="label">Variational</p>
+          </div>
+          <div>
+            <p>Variational&rsquo;s request-for-quote API prices a specific trade size, so the execution app requests executable quotes for both legs of a pair. I directed the app build with <code>curl_cffi</code> for API access and set the per-pair polling cadence to 30 seconds during monitoring and one second during execution. That cut order-endpoint traffic from <strong>86 to 8 requests per minute</strong>.</p>
+            <div class="links"><a href="https://github.com/DavidbigC/DCmaster-cv/blob/main/projects/within-omni.md">Read the RFQ execution case study</a></div>
+          </div>
+        </article>
+        <article class="work">
+          <div>
+            <h3>Hedge latency &amp; exchange clients</h3>
+            <p class="label">Lighter &amp; Hyperliquid</p>
+          </div>
+          <div>
+            <p>Lighter hedge transactions reached about <strong>300 ms, with a p99 of 315 ms</strong>, from submission to confirmation. I built a Go hedge server for Lighter, a Python fill monitor and API latency tests.</p>
+            <p>I wrote Rust exchange client code for Lighter and Hyperliquid using the exchanges&rsquo; Python and TypeScript SDKs as references.</p>
+          </div>
+        </article>
+        <article class="work">
+          <div>
+            <h3>On-chain confirmation &amp; incident diagnosis</h3>
+            <p class="label">Monad perp DEX</p>
+          </div>
+          <div>
+            <p>I owned quoting, inventory and hedge risk for a live market maker hedged on Lighter. I directed the move from the Monad venue&rsquo;s WebSocket feed to direct on-chain confirmations. Observed latency went from <strong>1,500 ms to two blocks (at most 400 ms)</strong>.</p>
+            <p>In a separate incident, on-chain receipts confirmed that <strong>134 of 141 apparent cancellation failures</strong> had succeeded.</p>
+          </div>
+        </article>
+        <article class="work">
+          <div>
+            <h3>Read-only Rust SDK prototype</h3>
+            <p class="label">HyperLink · Local prototype</p>
+          </div>
+          <div>
+            <p>I directed an independent Rust SDK prototype for signed account queries and private WebSocket order updates. It matches Python SDK signing fixtures, passes local reconnect tests, and includes a runnable quickstart and upstream compatibility checks. Mainnet verification is pending.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="repositories" aria-labelledby="repositories-heading">
+      <h2 id="repositories-heading">Selected GitHub repositories</h2>
+      <div class="projects">
+        <article class="project">
+          <h3>Lighter Execution SDK</h3>
+          <p>An unofficial Rust client for order signing, placement and cancellation, with persistent WebSocket submission and REST fallback. The v0.2.0 tests cover signing parity with the official Go SDK and recovery after uncertain submissions.</p>
+          <a href="https://github.com/DavidbigC/lighter-execution-sdk/tree/v0.2.0">Lighter SDK v0.2.0 on GitHub</a>
+        </article>
+        <article class="project">
+          <h3>HAR-RV volatility dashboard</h3>
+          <p>I directed a Python and FastAPI app that ingests minute-level Hyperliquid and Deribit data. It compares forecasts of realized volatility with implied volatility, tracks regimes and shows results by forecast horizon.</p>
+          <a href="https://github.com/DavidbigC/har-live-dashboard">Volatility dashboard on GitHub</a>
+        </article>
+        <article class="project">
+          <h3>FLOKI BNB Chain transaction warehouse</h3>
+          <p>I built an async Python pipeline that collects candidate trades from Flipside and Dune, decodes transaction receipts, classifies buys and sells, and stores the enriched data in PostgreSQL.</p>
+          <a href="https://github.com/DavidbigC/Floki-BSC-transaction-warehouse">FLOKI warehouse on GitHub</a>
+        </article>
+        <article class="project">
+          <h3>Sui transaction warehouse</h3>
+          <p>I built a Python and PostgreSQL pipeline that follows Sui checkpoints over JSON-RPC and stores normalized transactions, gas usage, events and object changes.</p>
+          <a href="https://github.com/DavidbigC/SUI-transaction-data-warehouse">Sui warehouse on GitHub</a>
+        </article>
+        <article class="project">
+          <h3>Financial research agent</h3>
+          <p>I designed and operated an AI research product for Chinese A-shares and US equities. It calls 33+ financial data tools, runs multi-model debates and produces reports with source provenance.</p>
+          <a href="https://github.com/DavidbigC/mytradfiagent">Research agent on GitHub</a>
+        </article>
+        <article class="project">
+          <h3>JD Aggregator</h3>
+          <p>I directed a local Web3 job-search app that deduplicates listings, ranks them by fit and exports tailored CVs. A documented October backfill reached 12,078 active jobs, with full descriptions for 96.8%.</p>
+          <a href="https://github.com/DavidbigC/jd-aggregator">JD Aggregator on GitHub</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="experience" aria-labelledby="experience-heading">
+      <h2 id="experience-heading">Experience</h2>
+      <div class="experience">
+        <article>
+          <div class="experience-header">
+            <h3>Independent</h3>
+            <p class="dates">2021–present · Full-time since May 2026</p>
+          </div>
+          <p class="label">On-Chain Market Maker &amp; Arbitrageur</p>
+          <ul>
+            <li>Own strategy, sizing, risk and live operations across on-chain perpetuals. This work ran alongside company roles before May 2026.</li>
+            <li>Write exchange integrations directly and specify, validate and operate larger systems built with AI coding agents. <a href="#market-systems">See the market systems</a>.</li>
+          </ul>
+        </article>
+        <article>
+          <div class="experience-header">
+            <h3>FLOKI</h3>
+            <p class="dates">Dec 2024–Apr 2026</p>
+          </div>
+          <p class="label">Data Analyst</p>
+          <ul>
+            <li>Turned web trading terminal feedback into feature requirements with the product manager and coordinated working sessions with engineers.</li>
+            <li>Built Python and SQL dashboards for the Telegram trading bot and web terminal. Tracked bot response times, activity and fees. Worked with engineers on event capture and data schemas.</li>
+            <li>Owned the product database behind reporting and dashboards. Also tracked Floki ID, staking and TokenFi Launchpad activity. <a href="https://github.com/DavidbigC/DCmaster-cv/blob/main/projects/floki-dashboards.md">Read the FLOKI dashboards case study</a>.</li>
+          </ul>
+        </article>
+        <article>
+          <div class="experience-header">
+            <h3>Elfin Metaverse (Dragon Race)</h3>
+            <p class="dates">May 2024–Mar 2025</p>
+          </div>
+          <p class="label">Operation &amp; Data Analyst</p>
+          <ul>
+            <li>Led data strategy for the opBNB launch, which reached over one million unique active wallets in its first week.</li>
+            <li>Built dashboards for activity, engagement and campaign performance, reducing manual reporting work by 90%. Led BattlePass work that reached over 10,000 unique participants in under a month.</li>
+          </ul>
+        </article>
+        <article>
+          <div class="experience-header">
+            <h3>CARV (GEMI Foundation)</h3>
+            <p class="dates">May 2022–Sep 2023</p>
+          </div>
+          <p class="label">Community Lead &amp; Business Development</p>
+          <ul>
+            <li>Helped external teams integrate with CARV&rsquo;s APIs. Answered technical questions and troubleshot both on-chain and in-app issues.</li>
+            <li>Led Discord community operations and used engagement data to redesign incentives. The community reached over 100,000 messages per month.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-heading">
+      <h2 id="skills-heading">Skills &amp; education</h2>
+      <div class="details-grid">
+        <div>
+          <h3>Technical skills</h3>
+          <dl>
+            <dt>Languages</dt>
+            <dd>Rust, Python, TypeScript, Go, SQL</dd>
+            <dt>Exchange integration &amp; operations</dt>
+            <dd>REST, WebSockets, transaction signing, fill reconciliation, latency measurement, <code>curl_cffi</code>, AWS Lightsail, systemd</dd>
+            <dt>Data &amp; applications</dt>
+            <dd>FastAPI, Flask, Streamlit, PostgreSQL, SQLite, Dune, Tableau</dd>
+          </dl>
+        </div>
+        <div>
+          <h3>Education</h3>
+          <ul class="education">
+            <li><strong>MSc Research Methods of Psychological Science</strong><p>University of Glasgow · 2024</p></li>
+            <li><strong>BSc Psychology &amp; Computer Science</strong><p>Denison University · 2021</p></li>
+          </ul>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="featured-card">
-      <div class="fcard-head navy">
-        <p class="fcard-type">Arbitrage System</p>
-        <h3 class="fcard-name"><a href="https://github.com/DavidbigC/Lighter-Vari-arbitrage-system" target="_blank" style="color:#fff;text-decoration:none;">Funding Rate Arbitrage System</a></h3>
-        <div class="fcard-badges">
-          <a href="https://github.com/DavidbigC/Lighter-Vari-arbitrage-system" class="badge badge-github" target="_blank">GitHub</a>
+    <section id="archive" aria-labelledby="archive-heading">
+      <h2 id="archive-heading">Earlier work &amp; other projects</h2>
+      <details class="archive-group">
+        <summary>Derivatives research &amp; DeFi tools</summary>
+        <div class="archive">
+          <article>
+            <h3><a href="https://github.com/DavidbigC/DCmaster-cv/blob/main/projects/crypto-options-agg.md">Multi-venue options analytics</a></h3>
+            <p>I directed a workspace for comparing options chains, implied volatility surfaces and spreads across venues, including a Node-to-Rust backend migration.</p>
+          </article>
+          <article>
+            <h3><a href="https://github.com/DavidbigC/polytailcryptostrat">Polymarket monitor</a></h3>
+            <p>I directed a Rust WebSocket monitor, probability alerts and backtests for five-minute crypto markets.</p>
+          </article>
+          <article>
+            <h3><a href="https://www.limitonamm.fun/">Limito</a></h3>
+            <p>Concentrated-liquidity limit orders and monitoring with a Next.js interface and a Uniswap hook. <a href="https://github.com/DavidbigC/DCmaster-cv/blob/main/projects/clamm-pendle-lfj.md">Project notes</a>.</p>
+          </article>
+          <article>
+            <h3><a href="https://github.com/DavidbigC/LFJ-MM-YIELDING-FARMING">LFJ liquidity manager</a></h3>
+            <p>Automated bin placement and rebalancing for the AVAX–BTC.b liquidity pool.</p>
+          </article>
+          <article>
+            <h3><a href="https://github.com/DavidbigC/Pendle-PT-Trading-Tool">Pendle PT trading tool</a></h3>
+            <p>Principal token yield modelling and skip-rate analysis.</p>
+          </article>
+          <article>
+            <h3><a href="https://github.com/DavidbigC/Defi-toolbox">DeFi Toolbox</a></h3>
+            <p>Notebooks for delta-neutral position sizing and liquidity allocation.</p>
+          </article>
+          <article>
+            <h3><a href="Dolomite-Farming.html">Dolomite farming calculator</a></h3>
+            <p>Yield modelling for lending and farming positions.</p>
+          </article>
+          <article>
+            <h3><a href="https://github.com/DavidbigC/Port-Tracker">Crypto portfolio tracker</a></h3>
+            <p>A Flask app for tracking positions and P&amp;L.</p>
+          </article>
         </div>
+      </details>
+      <details class="archive-group">
+        <summary>On-chain dashboards &amp; research</summary>
+        <div class="archive">
+          <article>
+            <img src="floki_tradingbot_dashboard_dune.png" alt="" loading="lazy" width="480" height="270">
+            <h3><a href="floki_tradingbot_dashboard_dune.png">FLOKI trading bot dashboard</a></h3>
+            <p>Snapshot of on-chain activity reporting for the trading bot.</p>
+          </article>
+          <article>
+            <img src="Carv_Node_sale.png" alt="" loading="lazy" width="480" height="270">
+            <h3><a href="https://dune.com/davidbigc/carv-node-sale">CARV node sale dashboard</a></h3>
+            <p>Sale participation and wallet distribution.</p>
+          </article>
+          <article>
+            <img src="contango%20dune.png" alt="" loading="lazy" width="480" height="270">
+            <h3><a href="https://dune.com/dragonborn/contango">Contango dashboard</a></h3>
+            <p>Trading volume, fees and user activity.</p>
+          </article>
+          <article>
+            <img src="SOFAdashboard.png" alt="" loading="lazy" width="480" height="270">
+            <h3><a href="https://dune.com/davidbigc/sofa-info">SOFA protocol dashboard</a></h3>
+            <p>On-chain activity for structured products.</p>
+          </article>
+          <article>
+            <img src="BAYC%20analysis.png" alt="" loading="lazy" width="480" height="270">
+            <h3><a href="https://davidbigc.github.io/BAYC-trading-analysis/">BAYC liquidity research</a></h3>
+            <p>Trade, floor price, order-book and lending-rate analysis.</p>
+          </article>
+          <article>
+            <img src="BestEVM.png" alt="" loading="lazy" width="480" height="270">
+            <h3><a href="Best_EVM.html">Best EVM for GameFi</a></h3>
+            <p>Analysis of gaming dapps on Base, Arbitrum and Blast using DappRadar data.</p>
+          </article>
+          <article>
+            <h3><a href="https://github.com/DavidbigC/Dune-sim">Aave V3 event listener</a></h3>
+            <p>Solidity listener for Borrow events with Foundry tests and a Cloudflare Workers API.</p>
+          </article>
+          <article>
+            <h3><a href="https://github.com/DavidbigC/Jupiter-best-trader">Jupiter trading activity research</a></h3>
+            <p>A Dune-backed notebook analysing activity among top Jupiter accounts.</p>
+          </article>
+        </div>
+      </details>
+      <details class="archive-group">
+        <summary>Desktop tools</summary>
+        <div class="archive">
+          <article>
+            <h3><a href="https://github.com/DavidbigC/DCs-Transcriber">DCs-Transcriber</a></h3>
+            <p>I directed a Swift macOS dictation app with a global hotkey, live transcription and local history.</p>
+          </article>
+          <article>
+            <h3><a href="https://github.com/DavidbigC/dc_coding_agent_display">Coding agent usage display</a></h3>
+            <p>I directed a floating macOS usage display for Claude Code and Codex, built on CodexBar.</p>
+          </article>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <p>David Chen</p>
+      <div class="links">
+        <a href="mailto:cgzdavid123@gmail.com">cgzdavid123@gmail.com</a>
+        <a href="https://github.com/DavidbigC">GitHub</a>
+        <a href="https://flipsidecrypto.xyz/DavidC/dashboards">Flipside</a>
       </div>
-      <div class="fcard-body">
-        <p class="fcard-desc">Production cross-exchange arbitrage system monitoring funding rate differentials between Variational and Lighter perpetuals across 80+ pairs.</p>
-        <ul class="fcard-bullets">
-          <li>Real-time divergence detection (&gt;10%) across 80+ perp pairs; filters &gt;$5M volume opportunities</li>
-          <li>TWAP execution engine with configurable timing and automated SL/TP risk controls</li>
-          <li>WebSocket + REST multi-account aggregation; SQLite P&amp;L tracking; self-hosted Flask/Nginx</li>
-        </ul>
-        <div class="tech-tags">
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">WebSocket</span>
-          <span class="tech-tag">Flask</span>
-          <span class="tech-tag">SQLite</span>
-          <span class="tech-tag">Arbitrum</span>
-        </div>
-      </div>
     </div>
-
-    <div class="featured-card">
-      <div class="fcard-head rust">
-        <p class="fcard-type">Options Aggregator</p>
-        <h3 class="fcard-name"><a href="https://github.com/DavidbigC/crypto_options_agg" target="_blank" style="color:#fff;text-decoration:none;">Multi-Exchange Options Aggregator</a></h3>
-        <div class="fcard-badges">
-          <a href="https://github.com/DavidbigC/crypto_options_agg" class="badge badge-github" target="_blank">GitHub</a>
-        </div>
-      </div>
-      <div class="fcard-body">
-        <p class="fcard-desc">Multi-exchange crypto options workspace for BTC, ETH, and SOL — aggregating live chains from Bybit, OKX, Deribit, and Derive.</p>
-        <ul class="fcard-bullets">
-          <li>Cross-exchange arbitrage and box spread views; gamma and vega scanning</li>
-          <li>Strategy optimizer, position builder, and integrated portfolio management</li>
-          <li>Next.js frontend + Express backend with real-time market data services</li>
-        </ul>
-        <div class="tech-tags">
-          <span class="tech-tag">TypeScript</span>
-          <span class="tech-tag">Next.js</span>
-          <span class="tech-tag">Express</span>
-          <span class="tech-tag">Options</span>
-          <span class="tech-tag">Multi-exchange</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ─── PROJECTS GRID ─── -->
-<section class="section">
-  <p class="section-label">Projects</p>
-  <div class="projects-grid">
-
-    <div class="project-card">
-      <a href="https://www.limitonamm.fun/" target="_blank">
-        <img src="Limito.png" alt="Limito">
-        <div class="project-card-info">
-          <h3>Limito — Limit Order CLAMM</h3>
-          <p>TypeScript/Node.js limit order tool for concentrated liquidity AMMs with a Uniswap Hook smart contract.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="https://github.com/DavidbigC/LFJ-MM-YIELDING-FARMING" target="_blank">
-        <img src="LFJ MM strategy.png" alt="LFJ MM Strategy">
-        <div class="project-card-info">
-          <h3>AVAX-BTC.b Liquidity Pool Manager</h3>
-          <p>Automated market making and yield farming strategy for AVAX-BTC.b on LFJ (Trader Joe).</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="https://github.com/DavidbigC/Floki-BSC-transaction-warehouse" target="_blank">
-        <img src="floki_bsc_database.png" alt="Floki BSC Transaction Warehouse">
-        <div class="project-card-info">
-          <h3>Floki BSC Transaction Warehouse</h3>
-          <p>On-chain data warehouse tracking Floki BSC transactions, whale movements, and trading patterns.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="https://dune.com/flokiwork/floki-bsc-trading-dashboard" target="_blank">
-        <img src="floki_tradingbot_dashboard_dune.png" alt="Floki Trading Dashboard">
-        <div class="project-card-info">
-          <h3>Floki Trading Dashboard</h3>
-          <p>Real-time Dune dashboard monitoring Floki trading bot activity and on-chain metrics.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="https://github.com/DavidbigC/SUI-transaction-data-warehouse" target="_blank">
-        <img src="sui warehouse.png" alt="SUI Transaction Data Warehouse">
-        <div class="project-card-info">
-          <h3>SUI Transaction Data Warehouse</h3>
-          <p>Data warehouse for SUI network transactions enabling deep on-chain analytics and pattern detection.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="https://portfolio-tracker-b12f.onrender.com/" target="_blank">
-        <img src="SS.png" alt="Crypto Portfolio Tracker">
-        <div class="project-card-info">
-          <h3>Crypto Portfolio Tracker</h3>
-          <p>Live tracker aggregating positions across multiple wallets and exchanges.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="https://substack.com/home/post/p-151048010" target="_blank">
-        <img src="contango writeup.PNG" alt="Contango Analysis">
-        <div class="project-card-info">
-          <h3>Contango $TANGO Analysis</h3>
-          <p>Deep-dive research on Contango protocol tokenomics, liquidity, and on-chain dynamics.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="https://dune.com/dragonborn/contango" target="_blank">
-        <img src="contango dune.png" alt="Contango Dashboard">
-        <div class="project-card-info">
-          <h3>Contango Trading Dashboard</h3>
-          <p>Dune dashboard tracking Contango trading volume, fees, and user activity.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="https://github.com/DavidbigC/Pendle-PT-Trading-Tool" target="_blank">
-        <img src="sUSDE PT APY prediction.png" alt="Pendle PT Trading Tool">
-        <div class="project-card-info">
-          <h3>Pendle PT Trading Tool</h3>
-          <p>APY prediction model and trading tool for Pendle PT positions with yield curve analysis.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="https://dune.com/davidbigc/sofa-info" target="_blank">
-        <img src="SOFAdashboard.png" alt="SOFA Protocol Dashboard">
-        <div class="project-card-info">
-          <h3>SOFA Protocol Dashboard</h3>
-          <p>On-chain analytics for SOFA protocol tracking structured product volumes and TVL.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="https://dune.com/davidbigc/carv-node-sale" target="_blank">
-        <img src="Carv_Node_sale.png" alt="CARV Node Sale Dashboard">
-        <div class="project-card-info">
-          <h3>CARV Node Sale Dashboard</h3>
-          <p>Real-time dashboard monitoring CARV node sale participation and wallet distribution.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="https://davidbigc.github.io/BAYC-trading-analysis/" target="_blank">
-        <img src="BAYC analysis.png" alt="BAYC Trading Analysis">
-        <div class="project-card-info">
-          <h3>BAYC Trading Data Analysis</h3>
-          <p>Statistical analysis of Bored Ape Yacht Club trading patterns and holder behaviour.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="Best_EVM.html" target="_blank">
-        <img src="BestEVM.png" alt="Best EVM for GameFi">
-        <div class="project-card-info">
-          <h3>Best EVM for GameFi Projects</h3>
-          <p>Data-driven analysis comparing EVM chains on cost, speed, and ecosystem fit for GameFi.</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="project-card">
-      <a href="Dolomite-Farming.html" target="_blank">
-        <img src="prediction.png" alt="Dolomite Farming Calculator">
-        <div class="project-card-info">
-          <h3>Dolomite Farming Calculator</h3>
-          <p>Yield prediction tool for Dolomite lending and farming positions with real-time APR modelling.</p>
-        </div>
-      </a>
-    </div>
-
-  </div>
-</section>
-
-<!-- ─── EXPERIENCE ─── -->
-<section class="section">
-  <p class="section-label">Experience</p>
-  <div class="exp-list">
-
-    <div class="exp-item">
-      <div class="exp-header">
-        <span class="exp-role">Data Analyst</span>
-        <span class="exp-dates">Dec 2024 – Present</span>
-      </div>
-      <p class="exp-org">FLOKI — Crypto fintech (Trading Bot, Floki ID, TokenFi Launchpad)</p>
-      <ul class="exp-bullets">
-        <li>KPI tracking and market analysis: built and maintained dashboards monitoring Trading Bot activity, Floki ID adoption, and TokenFi Launchpad on-chain interactions</li>
-        <li>Competitor analysis: systematic research on competing protocols' on-chain metrics, TVL trends, and feature signals to inform product roadmap</li>
-        <li>Protocol scouting: identified and surfaced promising early-stage projects for the TokenFi Launchpad pipeline</li>
-        <li>Data engineering: collaborated with backend developers and PM to design event-capture database schemas for robust long-term analytics</li>
-      </ul>
-    </div>
-
-    <div class="exp-item">
-      <div class="exp-header">
-        <span class="exp-role">Operation &amp; Data Analyst</span>
-        <span class="exp-dates">May 2024 – Mar 2025</span>
-      </div>
-      <p class="exp-org">Elfin Metaverse (Dragon Race) — #1 dApp on Manta Network, Top 3 on BNB Chain</p>
-      <ul class="exp-bullets">
-        <li>Analysed on-chain and off-chain user activity data to double monthly active interactions, making the platform the #1 most-used dApp on Manta Network</li>
-        <li>Built real-time Tableau dashboards tracking DAU/MAU, user engagement, and campaign performance — reducing manual reporting time by 90%</li>
-        <li>Led data strategy for opBNB chain launch, achieving 1M+ unique active wallets in one week and ranking #3 on the chain</li>
-        <li>Designed tokenomics and point incentive systems using Python agent-based simulations, improving next-month user retention by 25%</li>
-        <li>Spearheaded BattlePass system development end-to-end, attracting 10,000+ unique players in under one month</li>
-      </ul>
-    </div>
-
-    <div class="exp-item">
-      <div class="exp-header">
-        <span class="exp-role">Community Lead &amp; Business Development</span>
-        <span class="exp-dates">May 2022 – Sep 2023</span>
-      </div>
-      <p class="exp-org">CARV / GEMI Foundation — Web3 gaming identity and data protocol</p>
-      <ul class="exp-bullets">
-        <li>Analysed on-chain engagement metrics to redesign community incentive structures, growing Discord activity to 100K+ messages/month</li>
-        <li>Ran A/B tests on gamified reward mechanics, increasing regional event participation by 200%</li>
-        <li>Built community health dashboards tracking sentiment analysis, churn rate, and engagement KPIs — enabling data-driven moderation and content strategy</li>
-      </ul>
-    </div>
-
-    <div class="exp-item">
-      <div class="exp-header">
-        <span class="exp-role">DeFi Yield Developer &amp; On-chain Researcher</span>
-        <span class="exp-dates">2021 – Present</span>
-      </div>
-      <p class="exp-org">Independent</p>
-      <ul class="exp-bullets">
-        <li>Built and operated a production CEX/DEX arbitrage system spanning lending protocols, DEX aggregators, and multiple CEXs — including opportunity discovery, order placement, and automated SL/TP</li>
-        <li>Developed Limito: a limit order placement and monitoring tool for CLAMM positions (TypeScript/Node.js backend, Next.js frontend, Uniswap Hook smart contract via Foundry)</li>
-        <li>Applied ML and regression models (scikit-learn) to predict asset volatility and liquidity pool performance, informing strategy parameter optimisation</li>
-        <li>Tracked whale wallets, liquidity movements, and protocol trends via Dune, Allium, and Flipside — providing market intelligence for delta-neutral strategy decisions</li>
-        <li>Managed a delta-neutral stablecoin portfolio achieving 100% APR during volatile market conditions through continuous data-driven rebalancing</li>
-      </ul>
-    </div>
-
-  </div>
-</section>
-
-<!-- ─── SKILLS ─── -->
-<section class="section">
-  <p class="section-label">Skills</p>
-  <div class="skills-grid">
-
-    <div class="skill-group">
-      <h4>On-chain Analytics</h4>
-      <ul>
-        <li>Dune Analytics</li>
-        <li>Allium</li>
-        <li>Flipside</li>
-        <li>Whale wallet tracking</li>
-        <li>Liquidity monitoring</li>
-        <li>Protocol health analysis</li>
-      </ul>
-    </div>
-
-    <div class="skill-group">
-      <h4>AI &amp; Engineering</h4>
-      <ul>
-        <li>LLM Agent Architecture</li>
-        <li>OpenAI / Groq API</li>
-        <li>Prompt Engineering</li>
-        <li>Multi-turn Agentic Systems</li>
-        <li>ETL Pipelines</li>
-        <li>PostgreSQL / SQLite</li>
-      </ul>
-    </div>
-
-    <div class="skill-group">
-      <h4>Languages</h4>
-      <ul>
-        <li>Python (async)</li>
-        <li>TypeScript / Node.js</li>
-        <li>SQL</li>
-        <li>R</li>
-        <li>Go</li>
-        <li>Solidity (Foundry)</li>
-      </ul>
-    </div>
-
-    <div class="skill-group">
-      <h4>Data &amp; Viz</h4>
-      <ul>
-        <li>Tableau</li>
-        <li>Plotly / Streamlit</li>
-        <li>Chart.js</li>
-        <li>Regression Analysis</li>
-        <li>A/B Testing</li>
-        <li>Backtesting</li>
-      </ul>
-    </div>
-
-  </div>
-</section>
-
-<!-- ─── EDUCATION ─── -->
-<section class="section">
-  <p class="section-label">Education</p>
-  <div class="edu-list">
-    <div class="edu-item">
-      <p class="edu-degree">MSc Research Methods of Psychological Science</p>
-      <p class="edu-school">University of Glasgow &nbsp;·&nbsp; 2024 &nbsp;·&nbsp; Research: Cognitive load alleviation of cybersickness</p>
-    </div>
-    <div class="edu-item">
-      <p class="edu-degree">BSc Psychology &amp; Computer Science</p>
-      <p class="edu-school">Denison University &nbsp;·&nbsp; 2021</p>
-    </div>
-  </div>
-</section>
-
-<!-- ─── FOOTER ─── -->
-<footer>
-  <div class="footer-links">
-    <a href="https://github.com/DavidbigC" target="_blank">GitHub</a>
-    <a href="https://x.com/davidbigcccc" target="_blank">X / Twitter</a>
-    <a href="https://dune.com/davidbigc" target="_blank">Dune</a>
-    <a href="https://dune.com/dragonborn" target="_blank">Dune (dragonborn)</a>
-    <a href="https://flipsidecrypto.xyz/DavidC/dashboards" target="_blank">Flipside</a>
-    <a href="https://tradfiagentcn.xyz" target="_blank">tradfiagentcn.xyz</a>
-  </div>
-  <p>David Chen &nbsp;·&nbsp; cgzdavid123@gmail.com</p>
-</footer>
-
+  </footer>
 </body>
 </html>
